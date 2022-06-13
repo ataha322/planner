@@ -4,6 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"planner.xyi/src/database"
+	"planner.xyi/src/routes"
 )
 
 func main() {
@@ -14,11 +17,11 @@ func main() {
 		panic("Could no find the database")
 	}
 
+	database.Connect()
+	database.AutoMigrate()
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World desu~~~~~!!!!!!!")
-	})
+	routes.Setup(app)
 
 	app.Listen(":8000")
 }
