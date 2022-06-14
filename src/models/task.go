@@ -11,7 +11,9 @@ type Task struct {
 	TaskName        string    `json:"task_name"`
 	TaskDescription string    `json:"task_description"`
 	TaskDeadline    time.Time `json:"task_deadline"`
-	TaskLists       []Task    `json:"SubtaskList"`
+	TaskLists       []Task    `json:"SubtaskList" gorm: "many2many:subtask_list"`
+	IsSubTask       bool      `json: "is_subtask"`
+	UserId          uint      `json: "user_id" gorm: "foreignKey: UserId"`
 }
 
 func (task *Task) GetTimeLeft() time.Duration {
