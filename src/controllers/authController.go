@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"planner.xyi/src/database"
 	"planner.xyi/src/middlewares"
 	"planner.xyi/src/models"
-	"strconv"
-	"time"
 )
 
 func Register(c *fiber.Ctx) error {

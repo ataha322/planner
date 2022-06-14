@@ -20,6 +20,6 @@ func Setup(app *fiber.App) {
 	adminAuthenticated.Put("user/password", controllers.UpdatePassword)
 
 	// ? I supouse we wouldn't have tasks that are not attached of a user
-	adminAuthenticated.Get("user/task")
+	adminAuthenticated.Get("user/task", controllers.Tasks)
 
 }
