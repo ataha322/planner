@@ -23,3 +23,4 @@ func Connect() {
 func AutoMigrate() {
 	DB.AutoMigrate(models.User{})
 }
+
