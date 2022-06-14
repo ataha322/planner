@@ -2,24 +2,20 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"planner.xyi/src/database"
 	"planner.xyi/src/routes"
 )
 
 func main() {
-
-	_, err := gorm.Open(mysql.Open("root:root@tcp(db:3306)/plannerData"), &gorm.Config{})
-
-	if err != nil {
-		panic("Could no find the database")
-	}
-
 	database.Connect()
 	database.AutoMigrate()
+
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 
 	routes.Setup(app)
 
