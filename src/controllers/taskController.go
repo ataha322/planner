@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"planner.xyi/src/database"
 	"planner.xyi/src/models"
-	"strconv"
 )
 
 func Tasks(c *fiber.Ctx) error {
@@ -44,6 +45,25 @@ func UpdateTask(c *fiber.Ctx) error {
 	if err := c.BodyParser(&task); err != nil {
 		return err
 	}
+	database.DB.Model(&task).Updates(&task)
+
+	return c.JSON(task)
+}
+
+func UpdateDescritpion(c *fiber.Ctx) error {
+	var data map[string]string
+
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	task := models.Task{}
+	task.Id = uint(id)
+
+	if err := c.BodyParser(&task); err != nil {
+		return err
+	}
+
+	task.SetDescription(data["task_description"])
+
 	database.DB.Model(&task).Updates(&task)
 
 	return c.JSON(task)

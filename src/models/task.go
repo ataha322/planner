@@ -17,3 +17,7 @@ type Task struct {
 func (task *Task) GetTimeLeft() time.Duration {
 	return task.TaskDeadline.Sub(time.Now())
 }
+
+func (task *Task) SetDescription(newDescription string) {
+	task.TaskDescription = newDescription
+}
