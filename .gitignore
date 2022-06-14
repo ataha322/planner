@@ -1,2 +1,5 @@
-.vscode/
-
+.vscode/*
+.dbdata/*
+tmp/*
+.idea/*
+plannerData.session.sql
