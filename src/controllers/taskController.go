@@ -25,6 +25,20 @@ func CreateTask(c *fiber.Ctx) error {
 	}
 
 	database.DB.Create(&task)
+
+	var user models.User
+
+	userId, _ := strconv.Atoi(c.Params("user_id"))
+
+	user.Id = uint(userId)
+
+	if err := c.BodyParser(&user); err != nil {
+		return err
+	}
+	user.AddTask(task)
+
+	database.DB.Model(&user).Updates(&user)
+
 	return c.JSON(task)
 }
 
@@ -75,6 +89,24 @@ func DeleteTask(c *fiber.Ctx) error {
 	task := models.Task{}
 	task.Id = uint(id)
 
+	// Searches for a correct user that has this task
+	// and deleates itself drom user task list
+
+	// ? Might be too much, but as far as i understand,
+	// ? we previously deleated the data from our db,
+	// ? not an instance of task
+	var user models.User
+
+	userId, _ := strconv.Atoi(c.Params("user_id"))
+
+	user.Id = uint(userId)
+
+	if err := c.BodyParser(&user); err != nil {
+		return err
+	}
+	user.DeleteTask(task)
+
+	database.DB.Model(&user).Updates(&user)
 	database.DB.Delete(&task)
 
 	return nil

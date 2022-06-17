@@ -8,15 +8,19 @@ services:
       - .:/app
     depends_on:
       - db
+    environment:
+      MYSQL_HOST: host.docker.internal
   db:
     platform: linux/x86_64
-    image: mysql:8.0.25
+    image: mysql:5.7
+    container_name: plannerDB
     restart: always
     environment: 
       MYSQL_DATABASE: plannerData
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_HOST: host.docker.internal
     volumes:
       - .dbdata:/var/lib/mysql
     ports: 
-      - "3306:3306"
+      - 3306:3306

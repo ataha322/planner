@@ -19,3 +19,17 @@ func (user *User) SetPassword(password string) {
 func (user *User) ComparePassword(password string) error {
 	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
 }
+
+func (user *User) AddTask(newTask Task) {
+	user.Tasks = append(user.Tasks, newTask)
+}
+
+func (user *User) DeleteTask(deleteTask Task) {
+	for index, task := range user.Tasks {
+		if task.Id == deleteTask.Id {
+			user.Tasks = append(user.Tasks[:index], user.Tasks[index+1:]...)
+			break
+		}
+	}
+
+}
