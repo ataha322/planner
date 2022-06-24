@@ -8,7 +8,7 @@ type User struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email" gorm:"unique"`
 	Password  []byte `json:"-"`
-	Tasks     []Task `json:"tasks" gorm: "many2many:task_list"` //user will contain his unique slice of tasks
+	//Tasks     []Task `json:"tasks" gorm:"many2many:task_list"` //user will contain his unique slice of tasks
 }
 
 func (user *User) SetPassword(password string) {

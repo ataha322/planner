@@ -12,8 +12,9 @@ services:
     platform: linux/x86_64
     image: mysql:8.0.25
     restart: always
-    environment: 
+    environment:
       MYSQL_DATABASE: plannerData
+      MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
