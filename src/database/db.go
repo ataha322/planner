@@ -16,7 +16,7 @@ func Connect() {
 	DB, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
 
 	if err != nil {
-		panic("Could no find the database")
+		panic("Could not find the database")
 	}
 }
 

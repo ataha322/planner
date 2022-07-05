@@ -25,14 +25,14 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	user := models.User{
-		FirstName: data["first_name"],
-		LastName:  data["last_name"],
-		Email:     data["email"],
+		Username: data["username"],
+		Email:    data["email"],
 	}
 	user.SetPassword(data["password"])
 	database.DB.Create(&user)
 
 	return c.JSON(user)
+
 }
 
 func Login(c *fiber.Ctx) error {
@@ -117,9 +117,8 @@ func UpdateInfo(c *fiber.Ctx) error {
 	id, _ := middlewares.GetUserId(c)
 
 	user := models.User{
-		FirstName: data["first_name"],
-		LastName:  data["last_name"],
-		Email:     data["email"],
+		Username: data["username"],
+		Email:    data["email"],
 	}
 	user.Id = id
 
