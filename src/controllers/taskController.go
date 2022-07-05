@@ -24,6 +24,7 @@ func CreateTask(c *fiber.Ctx) error {
 	}
 
 	database.DB.Create(&task)
+
 	return c.JSON(task)
 }
 
