@@ -4,7 +4,8 @@ import "golang.org/x/crypto/bcrypt"
 
 type User struct {
 	Model
-	Username string `json:"username"`
+	First_name string  `json:"first_name"`
+	Username string `json:"username" gorm:"unique"`
 	Email    string `json:"email" gorm:"unique"`
 	Password []byte `json:"-"`
 	//Tasks     []Task `json:"tasks" gorm:"many2many:task_list"` //user will contain his unique slice of tasks
