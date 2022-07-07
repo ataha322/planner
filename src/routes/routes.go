@@ -18,4 +18,9 @@ func Setup(app *fiber.App) {
 	userAuthenticated.Post("logout", controllers.Logout)
 	userAuthenticated.Put("users/info", controllers.UpdateInfo)
 	userAuthenticated.Put("users/password", controllers.UpdatePassword)
+	userAuthenticated.Get("tasks", controllers.Tasks)
+	userAuthenticated.Post("tasks", controllers.CreateTask)
+	userAuthenticated.Get("tasks/:id", controllers.GetTask)
+	userAuthenticated.Put("tasks/:id", controllers.UpdateTask)
+	userAuthenticated.Delete("tasks/:id", controllers.DeleteTask)
 }
