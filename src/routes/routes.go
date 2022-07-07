@@ -25,6 +25,6 @@ func Setup(app *fiber.App) {
 	userAuthenticated.Get("tasks/:id", controllers.GetTask)
 	userAuthenticated.Put("tasks/:id", controllers.UpdateTask)
 	userAuthenticated.Delete("tasks/:id", controllers.DeleteTask)
-	userAuthenticated.Get("users/:id/links", controllers.Link)
-	userAuthenticated.Post("links", controllers.CreateLink)
+	// userAuthenticated.Get("users/:id/links", controllers.Link)
+	// userAuthenticated.Post("links", controllers.CreateLink)
 }

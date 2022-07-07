@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"planner.xyi/src/database"
-	"planner.xyi/src/models"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
+	"planner.xyi/src/database"
+	"planner.xyi/src/models"
 )
 
 func Tasks(c *fiber.Ctx) error {
