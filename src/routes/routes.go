@@ -12,6 +12,8 @@ func Setup(app *fiber.App) {
 
 	user.Post("register", controllers.Register)
 	user.Post("login", controllers.Login)
+	user.Get("task/frontend", controllers.TaskFrontend)
+	user.Get("task/backend", controllers.TaskBackend)
 
 	userAuthenticated := user.Use(middlewares.IsAuthenticated)
 	userAuthenticated.Get("user", controllers.User)
@@ -23,4 +25,6 @@ func Setup(app *fiber.App) {
 	userAuthenticated.Get("tasks/:id", controllers.GetTask)
 	userAuthenticated.Put("tasks/:id", controllers.UpdateTask)
 	userAuthenticated.Delete("tasks/:id", controllers.DeleteTask)
+	userAuthenticated.Get("users/:id/links", controllers.Link)
+	userAuthenticated.Post("links", controllers.CreateLink)
 }
