@@ -4,3 +4,4 @@
 .idea/*
 plannerData.session.sql
 planner.xyi
+docker-compose.yaml
