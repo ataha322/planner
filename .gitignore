@@ -4,4 +4,5 @@
 .idea/*
 plannerData.session.sql
 planner.xyi
-docker-compose.yaml
+/docker-compose.yaml
+src/tests/*
