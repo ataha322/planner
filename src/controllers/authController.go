@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"planner.xyi/src/database"
 	"planner.xyi/src/middlewares"
 	"planner.xyi/src/models"
-	"strconv"
-	"time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -24,6 +25,7 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	// ? Add email verification here
 	user := models.User{
 		Username: data["username"],
 		Email:    data["email"],
@@ -32,7 +34,6 @@ func Register(c *fiber.Ctx) error {
 	database.DB.Create(&user)
 
 	return c.JSON(user)
-
 }
 
 func Login(c *fiber.Ctx) error {
@@ -44,6 +45,7 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 
+	// ? Add email verification and login with username functionality here
 	database.DB.Where("email = ?", data["email"]).First(&user)
 
 	if user.Id == 0 {
@@ -66,6 +68,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte("secret"))
+
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{

@@ -1,6 +1,6 @@
 .vscode/*
 .dbdata/*
-tmp/*
+/tmp
 .idea/*
 plannerData.session.sql
 planner.xyi
