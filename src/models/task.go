@@ -6,6 +6,7 @@ import (
 
 type Task struct {
 	Model
+	TaskId          uint      `json:"task_id"`
 	TaskName        string    `json:"task_name"`
 	TaskDescription string    `json:"task_description"`
 	TaskDeadline    time.Time `json:"task_deadline"`
