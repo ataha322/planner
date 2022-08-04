@@ -32,6 +32,7 @@ func CreateTask(c *fiber.Ctx) error {
 
 	id, _ := middlewares.GetUserId(c)                                //getting user id
 	time, _ := time.Parse("2006-01-02 15:04", data["task_deadline"]) //type time.Time, parsing from json
+	//first argument is format, second is deadline itself
 
 	task := models.Task{
 		TaskName:        data["task_name"],
