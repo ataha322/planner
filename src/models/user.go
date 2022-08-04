@@ -8,7 +8,8 @@ type User struct {
 	Username  string `json:"username" gorm:"unique"`
 	Email     string `json:"email" gorm:"unique"`
 	Password  []byte `json:"-"`
-	Tasks     []Task `json:"tasks" gorm:"foreignKey:TaskId"` //user will contain his unique slice of tasks
+	//Tasks     []Task `json:"tasks" gorm:"foreignKey:TaskId"` //user will contain his unique slice of tasks
+	//no need for this, I'd rather store UserId in tasks
 }
 
 /**

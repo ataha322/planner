@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"planner.xyi/src/middlewares"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,14 +21,23 @@ func Tasks(c *fiber.Ctx) error {
 	database.DB.Find(&tasks)
 
 	return c.JSON(tasks)
-
 }
 
 func CreateTask(c *fiber.Ctx) error {
-	var task models.Task
+	var data map[string]string
 
-	if err := c.BodyParser(&task); err != nil {
+	if err := c.BodyParser(&data); err != nil {
 		return err
+	}
+
+	id, _ := middlewares.GetUserId(c)                                //getting user id
+	time, _ := time.Parse("2006-01-02 15:04", data["task_deadline"]) //type time.Time, parsing from json
+
+	task := models.Task{
+		TaskName:        data["task_name"],
+		TaskDescription: data["task_description"],
+		TaskDeadline:    time,
+		UserId:          id,
 	}
 
 	database.DB.Create(&task)

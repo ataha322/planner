@@ -6,15 +6,10 @@ import (
 
 type Task struct {
 	Model
-	TaskId          uint      `json:"task_id"`
 	TaskName        string    `json:"task_name"`
 	TaskDescription string    `json:"task_description"`
 	TaskDeadline    time.Time `json:"task_deadline"`
-	//TaskLists       []Task    `json:"SubtaskList" gorm:"many2many:subtask_list"`
-	//IsSubTask       bool      `json:"is_subtask"`
-	//UserId          uint      `json:"user_id" gorm:"foreignKey: UserId"`
-	//
-	//       this is disabled temporarily until minimum functionality is achieved
+	UserId          uint      `json:"user_id"`
 }
 
 /**

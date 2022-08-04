@@ -36,9 +36,9 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	user := models.User{
-		First_name: data["first_name"],
-		Username:   data["username"],
-		Email:      data["email"],
+		Firstname: data["first_name"],
+		Username:  data["username"],
+		Email:     data["email"],
 	}
 	user.SetPassword(data["password"])
 	database.DB.Create(&user)
@@ -55,7 +55,7 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 
-	// Implimentation of both username and email login
+	// Implementation of both username and email login
 	// ? probably possible to refactor
 	if ValidateEmail(data["email"]) {
 		database.DB.Where("email = ?", data["email"]).First(&user)
