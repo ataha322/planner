@@ -1,13 +1,17 @@
 package controllers
 
 import (
+	"net"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"planner.xyi/src/database"
 	"planner.xyi/src/middlewares"
 	"planner.xyi/src/models"
-	"strconv"
-	"time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -24,15 +28,22 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	if !ValidateEmail(data["email"]) {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "email is not valid",
+		})
+	}
+
 	user := models.User{
-		Username: data["username"],
-		Email:    data["email"],
+		First_name: data["first_name"],
+		Username:   data["username"],
+		Email:      data["email"],
 	}
 	user.SetPassword(data["password"])
 	database.DB.Create(&user)
 
 	return c.JSON(user)
-
 }
 
 func Login(c *fiber.Ctx) error {
@@ -44,20 +55,41 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 
-	database.DB.Where("email = ?", data["email"]).First(&user)
+	// Implimentation of both username and email login
+	// ? probably possible to refactor
+	if ValidateEmail(data["email"]) {
+		database.DB.Where("email = ?", data["email"]).First(&user)
 
-	if user.Id == 0 {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Invalid Credentials!",
-		})
-	}
+		if user.Id == 0 {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "Invalid Credentials!",
+			})
+		}
 
-	if err := user.ComparePassword(data["password"]); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Wrong password",
-		})
+		if err := user.ComparePassword(data["password"]); err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "Wrong password",
+			})
+		}
+
+	} else {
+		database.DB.Where("username = ?", data["username"]).First(&user)
+
+		if user.Id == 0 {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "Invalid Credentials!",
+			})
+		}
+
+		if err := user.ComparePassword(data["password"]); err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "Wrong password",
+			})
+		}
 	}
 
 	payload := jwt.StandardClaims{
@@ -66,6 +98,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte("secret"))
+
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
@@ -149,4 +182,23 @@ func UpdatePassword(c *fiber.Ctx) error {
 
 	database.DB.Model(&user).Updates(&user)
 	return c.JSON(user)
+}
+
+// Checks if email follows RFC 5322 structure and if
+// email domain exists in MX records
+func ValidateEmail(email string) bool {
+	var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+
+	if len(email) < 3 && len(email) > 254 {
+		return false
+	}
+	if !emailRegex.MatchString(email) {
+		return false
+	}
+	parts := strings.Split(email, "@")
+	mx, err := net.LookupMX(parts[1])
+	if err != nil || len(mx) == 0 {
+		return false
+	}
+	return true
 }
