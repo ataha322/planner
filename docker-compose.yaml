@@ -14,8 +14,8 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: plannerData
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - .dbdata:/var/lib/mysql

@@ -15,14 +15,18 @@ import (
 	"planner.xyi/src/models"
 )
 
+// Tasks : returns an array of tasks specific to the current UserId
 func Tasks(c *fiber.Ctx) error {
 	var tasks []models.Task
 
-	database.DB.Find(&tasks)
+	id, _ := middlewares.GetUserId(c) //getting user id
+
+	database.DB.Where("user_id = ?", id).Find(&tasks)
 
 	return c.JSON(tasks)
 }
 
+// CreateTask : creates a task and assigns a current UserId to it
 func CreateTask(c *fiber.Ctx) error {
 	var data map[string]string
 
@@ -30,9 +34,11 @@ func CreateTask(c *fiber.Ctx) error {
 		return err
 	}
 
-	id, _ := middlewares.GetUserId(c)                                //getting user id
-	time, _ := time.Parse("2006-01-02 15:04", data["task_deadline"]) //type time.Time, parsing from json
-	//first argument is format, second is deadline itself
+	id, _ := middlewares.GetUserId(c) //getting UserId
+
+	time, _ := time.Parse(time.RFC1123, data["task_deadline"]) //type time.Time, parsing from json
+	//first argument is format, second is the deadline itself
+	//RFC1123 format looks as following: "Mon, 02 Jan 2006 15:04:05 MST"
 
 	task := models.Task{
 		TaskName:        data["task_name"],
@@ -72,6 +78,7 @@ func UpdateTask(c *fiber.Ctx) error {
 	return c.JSON(task)
 }
 
+// DeleteTask : deletes a task by its id
 func DeleteTask(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
 
@@ -85,6 +92,7 @@ func DeleteTask(c *fiber.Ctx) error {
 	return nil
 }
 
+// TaskFrontend : caching tasks
 func TaskFrontend(c *fiber.Ctx) error {
 	var tasks []models.Task
 	var ctx = context.Background()
@@ -112,6 +120,7 @@ func TaskFrontend(c *fiber.Ctx) error {
 	return c.JSON(tasks)
 }
 
+//TaskBackend : Sort, Search, display in pages
 func TaskBackend(c *fiber.Ctx) error {
 	var tasks []models.Task
 	var ctx = context.Background()

@@ -16,6 +16,6 @@ type Task struct {
 * returns deadline datetime of a task
  */
 
-func (task *Task) GetTimeLeft() time.Duration {
-	return task.TaskDeadline.Sub(time.Now()) // ? S1024 - find out what's the difference between time.Until and t.Sub
+func (t *Task) GetTimeLeft() time.Duration {
+	return t.TaskDeadline.Sub(time.Now()) // ? S1024 - find out what's the difference between time.Until and t.Sub
 }
